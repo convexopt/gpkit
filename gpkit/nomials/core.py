@@ -44,10 +44,16 @@ class Nomial(NomialData):
             return self.parse_ast(excluded) + units
         mstrs = []
         for exp, c in self.hmap.items():
-            varstrs = []
-            for (var, x) in exp.items():
+            pvarstrs, nvarstrs = [], []
+            for (var, x) in sorted(exp.items(),
+                                   key=lambda vx: (vx[1], str(vx[0]))):
                 if not x:
                     continue
+                if x > 0:
+                    varstrlist = pvarstrs
+                else:
+                    x = -x
+                    varstrlist = nvarstrs
                 varstr = var.str_without(excluded)
                 if UNICODE_EXPONENTS and int(x) == x and 2 <= x <= 9:
                     x = int(x)
@@ -57,14 +63,18 @@ class Nomial(NomialData):
                         varstr += chr(8304+x)
                 elif x != 1:
                     varstr += "^%.2g" % x
-                varstrs.append(varstr)
-            varstrs.sort()
+                varstrlist.append(varstr)
+            numerator_strings = pvarstrs
             cstr = "%.3g" % c
-            if cstr == "-1" and varstrs:
-                mstrs.append("-" + "·".join(varstrs))
+            if cstr == "-1":
+                cstr = "-"
+            if numerator_strings and cstr == "1":
+                mstr = MUL.join(pvarstrs)
             else:
-                cstr = [cstr] if (cstr != "1" or not varstrs) else []
-                mstrs.append(MUL.join(cstr + varstrs))
+                mstr = MUL.join([cstr] + pvarstrs)
+            if nvarstrs:
+                mstr = mstr + "/" + "/".join(nvarstrs)
+            mstrs.append(mstr)
         return " + ".join(sorted(mstrs)) + units
 
     def latex(self, excluded=()):  # TODO: add ast parsing here

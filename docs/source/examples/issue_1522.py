@@ -1,5 +1,4 @@
 "Tests broadcast_sub function for returned-dictionary substitutions"
-import numpy as np
 from gpkit import Variable, Model, ConstraintSet, Vectorize
 from gpkit.small_scripts import broadcast_substitution
 

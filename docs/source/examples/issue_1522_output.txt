@@ -3,11 +3,6 @@ Optimal Cost
 ------------
  15
 
-Model Sensitivities (sorts models in sections below)
--------------------
-  +1.0 : Yum1.Cake
-       : Yum1.Cake.Pie
-
 Free Variables
 --------------
   | Yum1.Cake
@@ -40,11 +35,6 @@ Most Sensitive Constraints
 Optimal Cost
 ------------
  3
-
-Model Sensitivities (sorts models in sections below)
--------------------
-  +1.0 : Yum2.Cake
-       : Yum2.Cake.Pie
 
 Free Variables
 --------------

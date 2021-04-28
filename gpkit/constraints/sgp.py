@@ -191,8 +191,13 @@ solutions and can be solved with 'Model.solve()'.""")
                 del self.result["freevariables"][self.slack.key]  # pylint: disable=no-member
                 del self.result["variables"][self.slack.key]  # pylint: disable=no-member
                 del self.result["sensitivities"]["variables"][self.slack.key]  # pylint: disable=no-member
-                slackconstraint = self.gpconstraints[0]
-                del self.result["sensitivities"]["constraints"][slackconstraint]
+                slcon = self.gpconstraints[0]
+                slconsenss = self.result["sensitivities"]["constraints"][slcon]
+                del self.result["sensitivities"]["constraints"][slcon]
+                # TODO: create constraint in RelaxPCCP namespace
+                self.result["sensitivities"]["models"][""] -= slconsenss
+                if not self.result["sensitivities"]["models"][""]:
+                    del self.result["sensitivities"]["models"][""]
             elif verbosity > -1:
                 pywarnings.warn(
                     "Final solution let signomial constraints slacken by"

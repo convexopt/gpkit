@@ -11,7 +11,7 @@ Numbers = (int, float, np.number, Quantity)
 class FixedScalarMeta(type):
     "Metaclass to implement instance checking for fixed scalars"
     def __instancecheck__(cls, obj):
-        return hasattr(obj, "hmap") and len(obj.hmap) == 1 and not obj.vks
+        return getattr(obj, "hmap", None) and len(obj.hmap) == 1 and not obj.vks
 
 
 class FixedScalar(metaclass=FixedScalarMeta):  # pylint: disable=no-init

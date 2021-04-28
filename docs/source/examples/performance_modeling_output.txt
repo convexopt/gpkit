@@ -38,20 +38,20 @@ Optimal Cost
 
 Free Variables
 --------------
-      | Mission.FlightSegment.AircraftP.WingAero
-    D : [ 2.74      2.73      2.72      2.72     ]  [lbf] drag force
-
       | Mission.FlightSegment.AircraftP
 Wburn : [ 0.274     0.273     0.272     0.272    ]  [lbf] segment fuel burn
 Wfuel : [ 1.09      0.817     0.544     0.272    ]  [lbf] fuel weight
+
+      | Mission.FlightSegment.AircraftP.WingAero
+    D : [ 2.74      2.73      2.72      2.72     ]  [lbf] drag force
+
+      | Aircraft
+    W : 144.1                                       [lbf] weight
 
       | Aircraft.Wing
     S : 44.14                                       [ft²] surface area
     W : 44.14                                       [lbf] weight
     c : 1.279                                       [ft]  mean chord
-
-      | Aircraft
-    W : 144.1                                       [lbf] weight
 
 Variable Sensitivities
 ----------------------

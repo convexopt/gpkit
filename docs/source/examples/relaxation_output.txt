@@ -147,11 +147,6 @@ Relaxed Constants
   x_min: relaxed from 2 to 1
 ~~~~~~~~
 
-Model Sensitivities (sorts models in sections below)
--------------------
-  +2.0 : Relax2.OriginalValues
- <1e-8 : Relax2
-
 Free Variables
 --------------
     x : 1

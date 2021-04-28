@@ -143,12 +143,13 @@ def tight_table(self, _, ntightconstrs=5, tight_senss=1e-2, **kwargs):
     title = "Most Sensitive Constraints"
     if len(self) > 1:
         title += " (in last sweep)"
-        data = sorted(((-float("%+6.2g" % s[-1]), str(c)),
-                       "%+6.2g" % s[-1], id(c), c)
+        data = sorted(((-float("%+6.2g" % abs(s[-1])), str(c)),
+                       "%+6.2g" % abs(s[-1]), id(c), c)
                       for c, s in self["sensitivities"]["constraints"].items()
                       if s[-1] >= tight_senss)[:ntightconstrs]
     else:
-        data = sorted(((-float("%+6.2g" % s), str(c)), "%+6.2g" % s, id(c), c)
+        data = sorted(((-float("%+6.2g" % abs(s)), str(c)),
+                       "%+6.2g" % abs(s), id(c), c)
                       for c, s in self["sensitivities"]["constraints"].items()
                       if s >= tight_senss)[:ntightconstrs]
     return constraint_table(data, title, **kwargs)
@@ -634,7 +635,7 @@ class SolutionArray(DictOfLists):
             return NomialArray([self.atindex(i).subinto(posy)
                                 for i in range(len(self))])
 
-        return posy.sub(self["variables"])
+        return posy.sub(self["variables"], require_positive=False)
 
     def _parse_showvars(self, showvars):
         showvars_out = set()
@@ -799,9 +800,10 @@ def var_table(data, title, *, printunits=True, latex=False, rawlines=False,
         if minval and hidebelowminval and getattr(v, "shape", None):
             v[np.abs(v) <= minval] = np.nan
         model = lineagestr(k.lineage) if sortbymodel else ""
-        msenss = -sortmodelsbysenss.get(model, 0) if sortmodelsbysenss else 0
-        if hasattr(msenss, "shape"):
-            msenss = np.mean(msenss)
+        if not sortmodelsbysenss:
+            msenss = 0
+        else:  # sort should match that in msenss_table above
+            msenss = -round(np.mean(sortmodelsbysenss.get(model, 0)), 1)
         models.add(model)
         b = bool(getattr(v, "shape", None))
         s = k.str_without(("lineage", "vec"))
